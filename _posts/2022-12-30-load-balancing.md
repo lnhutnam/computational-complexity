@@ -83,12 +83,15 @@ CONGEST model = LOCAL model +  restricted size of message $$\theta(\text{log}n)$
 
 ### Distributed load balancing - Fractional
 
+Load in the system can be splitted indefinitely. So that, the perfect balancing always exists. However, it might be slow to converge.
+
 
 ![](../assets/figures/posts/dlb/dlb_fractional.gif)
 
 
 ### Distributed load balancing - Integral
 
+There exists an atomic unit of load, i.e unit weights (e.g, 1). Example: if we have load equal 5, it cannot be splitted into 2.5 and 2.5, but splitted easily into 2 and 3. This case can always achieve 1-convergence. Model is more realistic than fractional case. However, it harder to get positive results.
 
 ## Related works
 
@@ -120,6 +123,34 @@ Dynamic networks: faster convergence as long as any time step the diameter is bo
 
 Integral load balancing: only consider adjacent nodes must have similar loads. Due to adjacencies change frequently in dynamic settings => do not directly extend to dynamic settings.
 
+## Research question
+
+Focus on the time complexity of the load balancing in dynamic networks.
+
+### RA1: What is the role of randomness in achieving a fast convergence time for the problem?
+
+Considering the fractional load balancing, instead of having nodes flip a coin at every round to determine upon their role, paper shows that a node can play both role (send a request; consider request received). By “pretending” a node to be two nodes, one which only sends and one which only receives. Thus, the problem can be solved in deterministic. The system achieves $$\tau$$-convergence in time:
+
+$$
+O\left(\text{min}\left\{n^2\text{log}\left(\frac{Tn}{\tau}\right), \frac{Tn}{\tau}\right\}\right)
+$$
+
+Where $$T$$ is total load in the network; $$n$$ is number of nodes; $$\tau$$ is convergence parameter.
+
+Note: improving the results of previous work by a $$\text{log}n$$ factor.
+
+### RA2: Assuming integral loads, can a bounded convergence time still be achieved?
+
+It is very natural to know that a **basic atomic** unit of load that *cannot be splited*. Constraints that all nodes are initially integers and must remain so throughout the balance process, thus making the problem harder. Some algorithms might shift loads that no need according to each node’s local view. However, it is hard to be done in general. For answering this research question, one theorem shown that no matching-based algorithm can achieve a
+bounded convergence time for the integral case.
+
+### RA3: Going beyond the worst-case analysis enables to achieve a bounded convergence time in integral case?
+
+Motivation from smoothed analysis: fractional noise and adaptive adversary to make the problem can solved fast. Smoothed complexity: a deterministic, matching-based, load balancing algorithm, for any $$k>0$$ approximate number of random edges added per round:
+
+$$
+O\left(\frac{n^2}{k}\text{log}\frac{T}{\tau}\text{log}(n\text{log}T)\right)
+$$
 
 ## References
 
